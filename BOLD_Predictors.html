@@ -1,0 +1,696 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      -->
+    <title>Predicting the BOLD Response</title>
+    <meta name="generator" content="MATLAB 8.2">
+    <link rel="schema.DC" href="http://purltorg/dc/elements/1.1/">
+    <meta name="DC.date" content="2014-08-06">
+    <meta name="DC.source" content="PredictorsExercise4Publishing_Part1_v2.m">
+    <style type="text/css">
+    html,
+    body,
+    div,
+    span,
+    applet,
+    object,
+    iframe,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    blockquote,
+    pre,
+    a,
+    abbr,
+    acronym,
+    address,
+    big,
+    cite,
+    code,
+    del,
+    dfn,
+    em,
+    font,
+    img,
+    ins,
+    kbd,
+    q,
+    s,
+    samp,
+    small,
+    strike,
+    strong,
+    sub,
+    sup,
+    tt,
+    var,
+    b,
+    u,
+    i,
+    center,
+    dl,
+    dt,
+    dd,
+    ol,
+    ul,
+    li,
+    fieldset,
+    form,
+    label,
+    legend,
+    table,
+    caption,
+    tbody,
+    tfoot,
+    thead,
+    tr,
+    th,
+    td {
+        margin: 10;
+        padding: 0;
+        border: 0;
+        outline: 0;
+        font-size: 100%;
+        vertical-align: baseline;
+        background: transparent
+    }
+    body {
+        line-height: 1
+    }
+    ol,
+    ul {
+        list-style: none
+    }
+    blockquote,
+    q {
+        quotes: none
+    }
+    blockquote:before,
+    blockquote:after,
+    q:before,
+    q:after {
+        content: '';
+        content: none
+    }
+    :focus {
+        outine: 0
+    }
+    ins {
+        text-decoration: none
+    }
+    del {
+        text-decoration: line-through
+    }
+    table {
+        border-collapse: collapse;
+        border-spacing: 0
+    }
+    html {
+        width: 100%;
+        height: 100%;
+        min-height: 100%;
+        margin-bottom: 0%;
+    }
+    html body {
+        height: 100%;
+        margin: 0px;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        color: #000;
+        line-height: 160%;
+        background: white none;
+        overflow-y: scroll;
+    }
+    html body td {
+        vertical-align: top;
+        text-align: left;
+    }
+    hr {
+        color: black;
+    }
+    h1 {
+        padding: 0px;
+        margin: 0px 0px 30px;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 1.6em;
+        color: #00274c;
+        line-height: 100%;
+        font-weight: bolder;
+    }
+     h2 {
+        padding: 0px;
+        margin: 25px 0px 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 1.4em;
+        color: #000;
+        font-weight: bold;
+        line-height: 140%;
+        border-bottom: 3px solid #d6d4d4;
+        display: block;
+    }
+    h3 {
+        padding: 0px;
+        margin: 0px 0px 5px;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 1.2em;
+        color: #000;
+        font-weight: bold;
+        line-height: 140%;
+    }
+    a {
+        color: #005fce;
+        text-decoration: none;
+    }
+    a:hover {
+        color: #005fce;
+        text-decoration: underline;
+    }
+    a:visited {
+        color: #004aa0;
+        text-decoration: none;
+    }
+    p {
+        padding: 0px;
+        margin: 0px 0px 20px;
+    }
+    img {
+        padding: 10px;
+        margin: 0px 0px 20px;
+    }
+    p img,
+    pre img,
+    tt img,
+    li img {
+        margin-bottom: 0px;
+    }
+    ul {
+        padding: 0px;
+        margin: 0px 0px 20px 23px;
+        list-style: square;
+    }
+    ul li {
+        padding: 0px;
+        margin: 0px 0px 7px 0px;
+    }
+    ul li ul {
+        padding: 5px 0px 0px;
+        margin: 0px 0px 7px 23px;
+    }
+    ul li ol li {
+        list-style: decimal;
+    }
+    ol {
+        padding: 0px;
+        margin: 0px 0px 20px 0px;
+        list-style: decimal;
+    }
+    ol li {
+        padding: 0px;
+        margin: 0px 0px 7px 23px;
+        list-style-type: decimal;
+    }
+    ol li ol {
+        padding: 5px 0px 0px;
+        margin: 0px 0px 7px 0px;
+    }
+    ol li ol li {
+        list-style-type: lower-alpha;
+    }
+    ol li ul {
+        padding-top: 7px;
+    }
+    ol li ul li {
+        list-style: square;
+    }
+    .content {
+        font-size: 1.45em;
+        line-height: 140%;
+        padding: 20px;
+    }
+    pre,
+    tt,
+    code {
+        font-size: 12px;
+    }
+    pre {
+        margin: 0px 0px 20px;
+    }
+    pre.error {
+        color: red;
+    }
+    pre.codeinput {
+        padding: 10px;
+        border: 1px solid #d3d3d3;
+        background: #f7f7f7;
+    }
+    pre.codeoutput {
+        padding: 10px 11px;
+        margin: 0px 0px 20px;
+        color: #4c4c4c;
+    }
+    @media print {
+        pre.codeinput,
+        pre.codeoutput {
+            word-wrap: break-word;
+            width: 100%;
+        }
+    }
+    span.keyword {
+        color: #0000FF
+    }
+    span.comment {
+        color: #228B22
+    }
+    span.string {
+        color: #A020F0
+    }
+    span.untermstring {
+        color: #B20000
+    }
+    span.syscmd {
+        color: #B28C00
+    }
+    .footer {
+        width: auto;
+        padding: 10px 0px;
+        margin: 25px 0px 0px;
+        border-top: 1px dotted #878787;
+        font-size: 1.0em;
+        line-height: 140%;
+        font-style: italic;
+        color: #878787;
+        text-align: left;
+        float: none;
+    }
+    .footer p {
+        margin: 0px;
+    }
+    .footer a {
+        color: #878787;
+    }
+    .footer a:hover {
+        color: #878787;
+        text-decoration: underline;
+    }
+    .footer a:visited {
+        color: #878787;
+    }
+    table th {
+        padding: 7px 5px;
+        text-align: left;
+        vertical-align: middle;
+        border: 1px solid #d6d4d4;
+        font-weight: bold;
+    }
+    table td {
+        padding: 7px 5px;
+        text-align: left;
+        vertical-align: top;
+        border: 1px solid #d6d4d4;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <h1>Predicting the BOLD Response</h1>
+        <!--introduction-->
+        <p>In this exercise, we will use the program<i>PlotPredictorGUI</i>to interactively specify and explore various timeseries predictors of the BOLD response. Much of this content is adapted from from Rik Henson's<a href="http://imaging.mrc-cbu.cam.ac.uk/imaging/DesignEfficiency">excellent webpage on design efficiency.</a>
+        </p>
+        <!--/introduction-->
+        <h2>Contents</h2>
+        <div>
+            <ul>
+                <li><a href="#1">Basic Concepts</a>
+                </li>
+                <li><a href="#3">PlotPredictorGUI</a>
+                </li>
+                <li><a href="#8">Predicting the BOLD Response to a Single Event/Epoch</a>
+                </li>
+                <li><a href="#12">Predicting the BOLD Response to Multiple Events/Epochs</a>
+                </li>
+                <li><a href="#22">(Optional) Advanced Exercises</a>
+                </li>
+                <li><a href="#25">Define the Impulse Response Function and Convolve with the Timeseries</a>
+                </li>
+                <li><a href="#26">Define the Filter Matrix and Apply it to the Convolved Timeseries</a>
+                </li>
+            </ul>
+        </div>
+        <h2>Basic Concepts
+            <a name="1"></a>
+        </h2>
+        <p>Before continuing, just a quick review of terminology . A<b>Condition</b>tonsists of a number of<b>Trials</b>.replications of that condition). A Trial consists of one or more elements. These elements can be<b>Events</b>.hich cause brief bursts of neural actiity (e.g., an auditory cue presented for 500 ms) or<b>Epochs</b>.hich result in periods of sustained neural activity (e.g., a 40 s segment of a song). Events are assumed to have a zero duration, and in SPM, the duration value of "0" is treated as an Event. In contrast, Epochs always have a non-zero value, although this value is not necessarily fixed. The term<b>Variable Epoch Design</b>.s used to describe conditions where epoch length is left to vary (e.g., as in tasks where task performance is partially self-paced). Finally, note the following terms commonly used to describe the spacing of Trials and their elements:</p>
+        <div>
+            <ol>
+                <li><b>Intertrial Interval (ITI).</b> The time between successive trials of a given condition.</li>
+                <li><b>Interstimulus Interval (ISI).</b> The time between the offset (end) of one trial element and the onset (start) of the next.</li>
+                <li><b>Stimulus Onset Asyncrhony (SOA).</b> The time between onsets of successive trial elements.</li>
+            </ol>
+        </div>
+        <h2>PlotPredictorGUI
+            <a name="3"></a>
+        </h2>
+        <p>Start the program by entering its name at the MATLAB command line:</p><pre class="codeinput">PlotPredictorGUI
+</pre>
+        <img vspace="5" hspace="5" src="media/PredictorsExercise4Publishing_Part1_v2_01.png" alt="">
+        <p>This will open a window with the two panels above.</p>
+        <p>We'll call the panel on the left the<b>Input Panel:</b></p>
+        <div>
+            <ol><b>
+                <li>TR.</b> Repetition time for image acquisition. Determines the temporal resolution of the timeseries.</li>
+                <b><li>Number of Trials.</b> Number of trials in the timeseries.</li>
+                <b><li>Trial Duration</b>.Determines whether trials are events (duration=0) or epochs (duration&gt;0).</li>
+                <b><li>Intertrial Interval.</b> Duration of the interval between successive trials.</li>
+                <b><li>Begin/End Padding.</b> Duration of the interval prior to the first trial and after the last trial.</li>
+                <b><li>High-Pass Filter.</b> Cutoff for the high-pass filter (HPF) to apply to the timeseries.</li>
+            </ol>
+        </div>
+        <p>We'll call the panel on the right the<b>Plot Panel:</b></p>
+        <div>
+            <ol>
+                <b><li>Plot Raw.</b> Plot the raw (unconvolved) timeseries.</li>
+                <b><li>Plot Convolved.</b> Adds the timeseries convolved with the the canonical HRF.</li>
+                <b><li>Plot Filtered.</b> Adds the timeseries filtered at the cutoff specified in the Input Panel.</li>
+                <b><li>Jitter Onsets.</b> Apply random jitter to the onsets</li>
+                <b><li>Plot Filtered Design Matrix.</b> Show the plot as a design matrix</li>
+            </ol>
+        </div>
+        <h2>Predicting the BOLD Response to a Single Event/Epoch
+            <a name="8"></a>
+        </h2>
+        <p>Let's start with a single event, and consider how different parameters affect our ability to detect the BOLD response to that event as compared to a resting baseline condition. Enter the values listed below into the<b>Input Panel.</b> Then, press the<b>Plot Raw</b>button and you should see a plot like the one on the top right below. This is a representation of neural activity to a very brief event. Importantly, this is not a good representation of the BOLD response to a very brief event will look like. To get that, we need a basis function that is capable of translating neural activity to BOLD activity. To see the canonical (double-gamma) hemodynamic repsonse function (HRF) - that is, the predicted change in BOLD activity in repsonse to a nearly instantaneous burst of neural activity - press the<b>Plot Convolved</b>button and you should see a plot like the one on the bottom right below. This is the result of<i>convolving</i>the timeseries of predicted neural activity with the canonical HRF. Note how sluggish the BOLD signal is relative to the neural event that caused it. It is slow to peak (5-6 s) and even slower to return to its "baseline" value of 0 (30-32 s).</p>
+        <p>
+            <img vspace="5" hspace="5" src="media/FIG01.jpg" alt="">
+        </p>
+        <p>Now let's look at the BOLD response to single epoch, which can either be thought of as a single event with a sustained duration (e.g., an emotional experienced), or as a series of events beloning to the same experimental condition (e.g., a 20-second block in which the participant is to solve 8 simple mental arithmetic problems). To see the epoch, change the<i>Trial Duration</i>parameter in the<b>Input Panel</b>to 20. Plot both the raw and convolved regressors.</p>
+        <p>
+            <img vspace="5" hspace="5" src="media/FIG02.jpg" alt="">
+        </p>
+        <h2>Predicting the BOLD Response to Multiple Events/Epochs
+            <a name="12"></a>
+        </h2>
+        <p>We're ready to graduate to a single timeseries predictor for multiple events or epochs. Let's start with a design with 10 blocked trial epochs each lasting 20 seconds. Assuming you've been following along and haven't closed the plot, all you need to do is change the<i>Number of Trials</i>parameter in the<b>Input Panel</b>to 10. Plot the raw and convolved timeseries. What is wrong with this picture?</p>
+        <p>
+            <img vspace="5" hspace="5" src="media/FIG03.jpg" alt="">
+        </p>
+        <p>Clearly, this arrangement of events looks pretty good at activating the brain. But, because there is very little spacing between successive epochs, the hemodynamic response never has a chance to return to baseline. Because of this, the variance of the signal across time is small. This brings us to the fundamental concept of<b>design efficiency</b>and how better to tell you about it than Rik Henson:</p>
+        <i><p>"The basic idea behind maximising efficiency is to maximise the "energy" of the predicted fMRI timeseries. This is simply the sum of squared signal values at each scan. It is also proportional to the variance of the signal... In other words, to be best able to detect the signal in the presence of background noise (not shown), we want to maximise the variability of that signal. A signal that varies little will be difficult to detect."</p></i>
+        <p>With that in mind, let's return to our inefficient 10 block design. What should you change to increase the variance - and hence efficiency - of the design? Why did that work? What did you have to tradeoff in order to get this increase in efficiency?</p>
+        <p>Let's adapt our epoch design to make an event-related design. Event-related designs increase efficiency by allowing you to pack more events into a shorter period of time. Let's do an event-related design containing 40 trials (duration = 0). Since our trials are very brief, let's see if we can get away with an inter-trial interal of 3 seconds. Plot the raw and convolved timeseries.</p>
+        <p>
+            <img vspace="5" hspace="5" src="media/FIG06.jpg" alt="">
+        </p>
+        <p>Have we gained efficiency with this design? In the words of Rik Henson:</p>
+        <i><p>"Because the [hemodynamic responses] to successive events now overlap considerably, we end up an initial build-up (transient) followed by small oscillations around a "raised baseline". Although the overall signal is high, its variance is low, and the majority of stimulus energy will be lost after highpass filtering (particularly after removal of the mean, i.e lowest frequency)."</p></i>
+        <p>What's is the central problem with this design, and which button will help you fix it? Regardless of which button you have in mind, go ahead and press the<b>Jitter Onsets</b>button to re-create your event-related design with random jitter applied to the intervals between successive trials. Convolve the raw predictor with the canonical HRF.</p>
+        <p>
+            <img vspace="5" hspace="5" src="media/FIG07.jpg" alt="">
+        </p>
+        <p>Did this increase the variance of the signal? If you're not happy with the result, feel free to press the jitter button as many times as you'd like - each time, it'll randomly generate a new jittered timeseries. Before concluding this section, go ahead and press the<b>Plot Design Matrix</b>button. This will produce a new media/FIGure like the one below.</p>
+        <p>
+            <img vspace="5" hspace="5" src="media/FIG08.jpg" alt="">
+        </p>
+        <p>This is what people typically have in mind when they use the phrase "Design Matrix". The only way this differs numerically from the previous plot you created is its inclusion of a second column - the so-called constant or mean response - that is necessary for estimating a general linear model (GLM). In the next section, we'll consider issues that arise when multiple predictors are included (as is almost always the case), and will explore methods for quantifying the efficiency of a design matrix so that you can automate the discovery of the best (i.e., most efficient) design for your study.</p>
+        <h2>(Optional) Advanced Exercises
+            <a name="22"></a>
+        </h2>
+        <p>For these exercises, you'll see how SPM carries out timeseries convolution and high-pass filtering (HPF). To make this easier on you, you can export any timeseries predictor you create in the PlotPredictorGUI by clicking on<b>Export Timeseries Data</b>from the drop-down window on the top left of the GUI.</p>
+        <p>
+            <img vspace="5" hspace="5" src="media/EXPORTSIDEBAR.png" alt="">
+        </p>
+        <p>This will export your raw timeseries into a structure variable named "output" that you can play with through the MATLAB command window.</p>
+        <h2>Define the Impulse Response Function and Convolve with the Timeseries
+            <a name="25"></a>
+        </h2>
+        <p>The function SPM_HRF is use to create the IRF, while the function CONV allows you to convolve the timeseries with the IRF.</p><pre class="codeinput">ts      = output.X0;            <span class="comment">% get the raw timeseries from 'output'</span>
+tr      = output.TR;            <span class="comment">% do the same for the TR</span>
+irf     = spm_hrf(tr);          <span class="comment">% create the impulse response function</span>
+cts     = conv(ts, irf);        <span class="comment">% convolve the timeseries with the IRF</span>
+cts     = cts(1:length(ts));    <span class="comment">% ensure that the long tail of the hemodynamic response hasn't lengthened our image timeseries</span>
+</pre>
+        <h2>Define the Filter Matrix and Apply it to the Convolved Timeseries
+            <a name="26"></a>
+        </h2>
+        <p>The function SPM_FILTER is used to both create the filter matrix "K" and and apply that filter matrix to our convolvecd timeseries "cts".</p><pre class="codeinput">K.RT     = tr;                  <span class="comment">% assign TR to K</span>
+K.HParam = 128;                 <span class="comment">% assign HPF cutoff (s) to K</span>
+K.row    = 1:length(cts);       <span class="comment">% the timepoints to filter (all, in this case)</span>
+K        = spm_filter(K);       <span class="comment">% add the filter matrix to the sturcture K</span>
+                                <span class="comment">% this matrix is stored in the field X0</span>
+fcts     = spm_filter(K, cts);  <span class="comment">% filter the timeseries using K</span>
+</pre>
+        <p class="footer">
+            <br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013b</a>
+            <br>
+        </p>
+    </div>
+    <!--
+##### SOURCE BEGIN #####
+% Predicting the BOLD Response
+% In this exercise, we will use the program _PlotPredictorGUI_ to
+% interactively specify and explore various timeseries predictors of the
+% BOLD response. Most of the content is adapted from from Rik Henson:
+% <http://imaging.mrc-cbu.cam.ac.uk/imaging/DesignEfficiency Design
+% Efficiency>
+
+% Basic Concepts
+% Before continuing, just a quick review of terminology . A *Condition*
+% consists of a number of *Trials* (replications of that condition). A
+% Trial consists of one or more elements. These elements can be *Events*
+% which cause brief bursts of neural actiity (e.g., an auditory cue
+% presented for 500 ms) or *Epochs* which result in periods of sustained
+% neural activity (e.g., a 40 s segment of a song). Events are assumed to
+% have a zero duration, and in SPM, the duration value of "0" is treated as
+% an Event. In contrast, Epochs always have a non-zero value, although this
+% value is not necessarily fixed. The term *Variable Epoch Design* is used
+% to describe conditions where epoch length is left to vary (e.g., as in
+% tasks where task performance is partially self-paced). Finally, note the
+% following terms commonly used to describe the spacing of Trials and their
+% elements:
+%
+
+%
+% # *Intertrial Interval (ITI)*. The time between successive trials of a
+% given condition.
+% # *Interstimulus Interval (ISI)*. The time between the offset (end) of
+% one trial element and the onset (start) of the next.
+% # *Stimulus Onset Asyncrhony (SOA)*. The time between onsets of
+% successive trial elements.
+%
+
+% PlotPredictorGUI
+% Start the program by entering its name at the MATLAB command line: 
+PlotPredictorGUI
+
+%  
+% This will open a window with two panes. On the left is the *Input Panel*:
+%
+
+% 
+% # *TR*.  Repetition time of image acquisition
+% # *Number of Trials*.  Number of trials in the task
+% # *Trial Duration*.  Duration of an individual trial
+% # *Inter-Trial Interval*.  Resting time between successive trials
+% # *Begin/End Padding*.  Resting time at beginning/end of task
+% # *High-Pass Filter*.  Cutoff for high-pass filter
+%
+
+%
+% On the right is the *Plotting Panel*:
+%
+
+% 
+% # *Plot Raw*.  Plot the raw (unconvolved) timeseries
+% # *Plot Convolved*.  Convolve and plot with the canonical HRF
+% # *Plot Filtered*.  Apply the high-pass filter to the timeseries
+% # *Plot Design Matrix*.  Show the plot as a design matrix
+% # *Jitter Onsets*.  Apply random jitter to the onsets
+% 
+
+% Predicting the BOLD Response to a Single Event/Epoch
+% To introduce the basics, let's start with a single event, and consider
+% how different parameters affect our ability to detect the BOLD response
+% to that event as compared to a resting baseline condition. Enter the
+% values listed below into the *Input Panel*. Then, press the *Plot Raw*
+% button and you should see a plot like the one on the top right below.
+% This is a representation of neural activity to a very brief event.
+% Importantly, this is not a good representation of the BOLD response to a
+% very brief event will look like. To get that, we need a basis function
+% that is capable of translating neural activity to BOLD activity. To see
+% the canonical (double-gamma) hemodynamic repsonse function (HRF) - that
+% is, the predicted change in BOLD activity in repsonse to a nearly
+% instantaneous burst of neural activity - press the *Plot Convolved*
+% button and you should see a plot like the one on the bottom right below.
+% This is the result of _convolving_ the timeseries of predicted neural
+% activity with the canonical HRF. Note how sluggish the BOLD signal is
+% relative to the neural event that caused it. It is slow to peak (5-6 s)
+% and even slower to return to its "baseline" value of 0 (30-32 s). 
+%
+
+%  
+% 
+% <<media/FIG01.jpg>>
+% 
+
+%  
+% Now let's look at the BOLD response to  single epoch, which can either be
+% thought of as a single event with a sustained duration (e.g., an
+% emotional experienced), or as a series of events beloning to
+% the same experimental condition (e.g., a 20-second block in which the
+% participant is to solve 8 simple mental arithmetic problems). To see the
+% epoch, change the _Trial Duration_ parameter in the *Input Panel* to 20.
+% Plot both the raw and convolved regressors.
+%
+
+%  
+% 
+% <<media/FIG02.jpg>>
+% 
+
+% Predicting the BOLD Response to Multiple Events/Epochs 
+% We're ready to graduate to a single timeseries predictor for multiple
+% events or epochs. Let's start with a design with 10 blocked trial epochs
+% each lasting 20 seconds. Assuming you've been following along and haven't
+% closed the media/FIGure, all you need to do is change the _Number of Trials_
+% parameter in the *Input Panel* to 10. Plot the raw and convolved
+% timeseries. What is wrong with this picture? 
+%
+
+%  
+% 
+% <<media/FIG03.jpg>>
+% 
+
+%
+% Clearly, this arrangement of events looks pretty good at activating the
+% brain. But, because there is very little spacing between successive
+% epochs, the hemodynamic response never has a chance to return to
+% baseline. Because of this, the variance of the signal across time is
+% small. This brings us to the fundamental concept of design *efficiency*,
+% and how better to tell you about it than Rik Henson: 
+%
+% "The basic idea behind maximising efficiency is to maximise the "energy"
+% of the predicted fMRI timeseries. This is simply the sum of squared
+% signal values at each scan. It is also proportional to the variance of
+% the signal... In other words, to be best able to detect the signal in the
+% presence of background noise (not shown), we want to maximise the
+% variability of that signal. A signal that varies little will be difficult
+% to detect."
+%
+%
+% With that in mind, let's return to our inefficient 10 block design. What
+% should you change to increase the variance - and hence efficiency - of
+% the design? Why did that work? What did you have to tradeoff in order to
+% get this increase in efficiency? 
+
+%
+% Let's adapt our epoch design to make an event-related design.
+% Event-related designs increase efficiency by allowing you to pack more
+% events into a shorter period of time. Let's do an event-related design
+% containing 40 trials (duration = 0). Since our trials are very brief,
+% let's see if we can get away with an inter-trial interal of 3 seconds.
+% Plot the raw and convolved timeseries.
+
+%  
+% 
+% <<media/FIG06.jpg>>
+% 
+
+%
+% Have we gained efficiency with this design? In the words of Rik Henson: 
+%
+% "Because the [hemodynamic responses] to successive events now overlap
+% considerably, we end up an initial build-up (transient) followed by small
+% oscillations around a "raised baseline". Although the overall signal is
+% high, its variance is low, and the majority of stimulus energy will be
+% lost after highpass filtering (particularly after removal of the mean,
+% i.e lowest frequency)."
+%
+%
+% What's is the central problem with this design, and which button will
+% help you fix it? Regardless of which button you have in mind, go ahead
+% and press the *Jitter Onsets* button to re-create your event-related
+% design with random jitter applied to the intervals between successive
+% trials. Convolve the raw predictor with the canonical HRF.
+%
+
+%  
+% 
+% <<media/FIG07.jpg>>
+% 
+
+%
+% Did this increase the variance of the signal? If you're not happy with
+% the result, feel free to press the jitter button as many times as you'd
+% like - each time, it'll randomly generate a new jittered timeseries. 
+% Before concluding this section, go ahead and press the *Plot Design
+% Matrix* button. This will produce a new media/FIGure like the one below. 
+%
+
+%  
+% 
+% <<media/FIG08.jpg>>
+% 
+
+%
+% This is what people typically have in mind when they use the phrase
+% "Design Matrix". The only way this differs numerically from the previous
+% plot you created is its inclusion of a second column - the so-called
+% constant or mean response - that is necessary for estimating a general
+% linear model (GLM). In the next section, we'll consider issues that arise
+% when multiple predictors are included (as is almost always the case), and
+% will explore methods for quantifying the efficiency of a design matrix so
+% that you can automate the discovery of the best (i.e., most efficient)
+% design for your study.
+%
+
+% (Optional) Advanced Exercises
+% For these exercises, you'll see how SPM carries out timeseries
+% convolution and high-pass filtering (HPF). To make this easier on you,
+% you can export any timeseries predictor you create in the
+% PlotPredictorGUI by clicking on *Export Timeseries Data* from the
+% drop-down window on the top left of the GUI. 
+
+%  
+% 
+% <<media/EXPORTSIDEBAR>>
+% 
+
+%
+% This will export your raw timeseries into a structure variable named
+% "output" that you can play with through the MATLAB command window.
+%
+
+% Define the Impulse Response Function and Convolve with the Timeseries
+% The function SPM_HRF is use to create the IRF, while the function CONV
+% allows you to convolve the timeseries with the IRF. 
+ts      = output.X0;            % get the raw timeseries from 'output'
+tr      = output.TR;            % do the same for the TR
+irf     = spm_hrf(TR);          % create the impulse response function
+cts     = conv(ts, irf);        % convolve the timeseries with the IRF
+cts     = cts(1:length(ts));    % ensure that the long tail of the hemodynamic response hasn't lengthened our image timeseries
+
+% Define the Filter Matrix and Apply it to the Convolved Timeseries
+% The function SPM_FILTER is used to both create the filter matrix "K" and
+% and apply that filter matrix to our convolvecd timeseries "cts". 
+K.RT     = TR;                  % assign TR to K
+K.HParam = 128;                 % assign HPF cutoff (s) to K
+K.row    = 1:length(cts);       % the timepoints to filter (all, in this case)
+K        = spm_filter(K);       % add the filter matrix to the sturcture K
+                                % this matrix is stored in the field X0
+fcts     = spm_filter(K, cts);  % filter the timeseries using K
+##### SOURCE END #####
+-->
+</body>
+
+</html>
